@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@babel/eslint-parser": "^7.17.0",
     "bootstrap": "^5.1.3",
     "http-proxy-middleware": "^0.19.1",
     "jquery": "^3.6.0",
@@ -15,24 +16,24 @@
     "react-scripts": "^5.0.0",
     "reactstrap": "^8.9.0",
     "rimraf": "^2.6.2",
-    "web-vitals": "^0.2.4",                
-    "workbox-background-sync": "^5.1.3",   
-    "workbox-broadcast-update": "^5.1.3",  
+    "web-vitals": "^0.2.4",
+    "workbox-background-sync": "^5.1.3",
+    "workbox-broadcast-update": "^5.1.3",
     "workbox-cacheable-response": "^5.1.3",
-    "workbox-core": "^5.1.3",              
-    "workbox-expiration": "^5.1.3",        
-    "workbox-google-analytics": "^5.1.3",  
+    "workbox-core": "^5.1.3",
+    "workbox-expiration": "^5.1.3",
+    "workbox-google-analytics": "^5.1.3",
     "workbox-navigation-preload": "^5.1.3",
-    "workbox-precaching": "^5.1.3",        
-    "workbox-range-requests": "^5.1.3",    
-    "workbox-routing": "^5.1.3",           
-    "workbox-strategies": "^5.1.3",        
+    "workbox-precaching": "^5.1.3",
+    "workbox-range-requests": "^5.1.3",
+    "workbox-routing": "^5.1.3",
+    "workbox-strategies": "^5.1.3",
     "workbox-streams": "^5.1.3"
   },
   "devDependencies": {
     "ajv": "^6.9.1",
     "cross-env": "^7.0.3",
-    "eslint": "^7.25.0",
+    "eslint": "^7.32.0",
     "eslint-config-react-app": "^6.0.0",
     "eslint-plugin-flowtype": "^5.7.2",
     "eslint-plugin-import": "^2.22.1",
@@ -51,7 +52,8 @@
   "eslintConfig": {
     "extends": [
       "react-app"
-    ]
+    ],
+    "parser": "@babel/eslint-parser"
   },
   "browserslist": {
     "production": [
