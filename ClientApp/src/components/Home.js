@@ -10,6 +10,7 @@ import Typography from '@mui/material/Typography';
 import { templates } from '../Constants';
 import { SelectFramework } from './SelectFramework';
 import { Review } from './Review';
+import Alert from '@mui/material/Alert';
 
 const steps = ['SELECT FRONTEND', 'SELECT BACKEND', 'REVIEW'];
 
@@ -22,6 +23,7 @@ export function Home() {
     const [frontend, setFrontend] = React.useState("");
     const [backend, setBackend] = React.useState("");
     const [platform, setPlatform] = React.useState("web");
+    const [alert, setAlert] = React.useState(false);
 
     React.useEffect(() => {
         setCombinations(() => templates);
@@ -43,6 +45,14 @@ export function Home() {
         //    newSkipped = new Set(newSkipped.values());
         //    newSkipped.delete(activeStep);
         //}
+        if (activeStep == 0 && frontend == "") {
+            setAlert(true);
+            return;
+        }
+        if (activeStep == 1 && backend == "") {
+            setAlert(true);
+            return;
+        }
         if (activeStep == steps.length - 1) {
             handleGenerate();
         }
@@ -72,6 +82,8 @@ export function Home() {
 
     const handleReset = () => {
         setActiveStep(0);
+        setFrontend("");
+        setBackend("");
     };
 
     const handleFrontends = () => {
@@ -92,11 +104,13 @@ export function Home() {
 
     const onFrontendChange = (value) => {
         setFrontend(value);
+        setAlert(false);
         handleBackends();
     }
 
     const onBackendChange = (value) => {
         setBackend(value);
+        setAlert(false);
     }
 
     const handleGenerate = async () => {
@@ -158,15 +172,17 @@ export function Home() {
             {activeStep === steps.length ? (
                 <React.Fragment>
                     <Typography sx={{ mt: 2, mb: 1 }}>
-                        All steps completed - you&apos;re finished
+                        All steps completed - Please click generate if download did not trigger
                     </Typography>
                     <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
                         <Box sx={{ flex: '1 1 auto' }} />
+                        <Button onClick={handleGenerate}>Generate</Button>
                         <Button onClick={handleReset}>Start new template</Button>
                     </Box>
                 </React.Fragment>
             ) : (
-                <React.Fragment>
+                    <React.Fragment>
+                        {alert?<Alert severity="error">Please select a framework</Alert>:<></> }
                     {activeStep<2 ? <Typography sx={{ mt: 3, mb: 5 }} align="left">Choose the framework</Typography>:<></>}
                         {activeStep === 0 ?
                             (<SelectFramework frameworks={{ ...frontends }} onFrameworkChange={onFrontendChange} />) :
