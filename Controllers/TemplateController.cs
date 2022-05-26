@@ -15,8 +15,8 @@ namespace template_generator.Controllers
             _configuration = configuration;
         }
 
-        [HttpGet("download")]
-        public async Task<FileContentResult> Download([FromForm]Template template)
+        [HttpPost("download")]
+        public async Task<FileContentResult> Download(Template template)
         {
             if (ModelState.IsValid)
             {

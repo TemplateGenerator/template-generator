@@ -1,4 +1,6 @@
 import * as React from 'react';
+import axios from 'axios';
+import { saveAs } from 'file-saver';
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
@@ -7,6 +9,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { templates } from '../Constants';
 import { SelectFramework } from './SelectFramework';
+import { Review } from './Review';
 
 const steps = ['SELECT FRONTEND', 'SELECT BACKEND', 'REVIEW'];
 
@@ -40,6 +43,9 @@ export function Home() {
         //    newSkipped = new Set(newSkipped.values());
         //    newSkipped.delete(activeStep);
         //}
+        if (activeStep == steps.length - 1) {
+            handleGenerate();
+        }
 
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
         //setSkipped(newSkipped);
@@ -88,10 +94,44 @@ export function Home() {
         setFrontend(value);
         handleBackends();
     }
-    console.log(frontend,backends);
 
     const onBackendChange = (value) => {
         setBackend(value);
+    }
+
+    const handleGenerate = async () => {
+        //var template = new FormData();
+        //template.append("Frontend", frontend);
+        //template.append("Backend", backend);
+        //template.append("Platform", platform);
+        //console.log(template.get("Frontend"));
+        //var template = {
+        //    'Frontend': frontend,
+        //    Backend: backend,
+        //    Platform: platform
+        //}
+        let postdat = {
+            'Frontend': frontend,
+            'Backend': backend,
+            'Platform': platform
+        };
+        console.log(postdat);
+        await axios({
+            method: 'POST',
+            headers: { "Content-Type": "application/json", "Accept": "application/json" },
+            responseType: 'blob',
+            url: 'template/download',
+            data: postdat
+            ,
+        }).then(res => {
+            const blob = new Blob([res.data], {
+                type: 'application/zip'
+            });
+            saveAs(blob, frontend + "-" + backend + ".zip");
+        })
+            .catch(err => {
+                console.log(err.message);
+            });
     }
 
     return (
@@ -126,12 +166,12 @@ export function Home() {
                     </Box>
                 </React.Fragment>
             ) : (
-                    <React.Fragment>
-                        <Typography sx={{ mt: 2, mb: 5 }} align="left">Choose the frontend framework</Typography>
+                <React.Fragment>
+                    {activeStep<2 ? <Typography sx={{ mt: 3, mb: 5 }} align="left">Choose the framework</Typography>:<></>}
                         {activeStep === 0 ?
                             (<SelectFramework frameworks={{ ...frontends }} onFrameworkChange={onFrontendChange} />) :
                             activeStep === 1 ? (<SelectFramework frameworks={{ ...backends }} onFrameworkChange={onBackendChange} />) :
-                                (<></>)
+                                (<Review frontend={frontend} backend={backend} />)
                         }
                 
                     <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
