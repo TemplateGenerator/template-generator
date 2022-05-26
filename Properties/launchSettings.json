@@ -4,7 +4,7 @@
     "anonymousAuthentication": true,
     "iisExpress": {
       "applicationUrl": "http://localhost:33442",
-      "sslPort": 0
+      "sslPort": 44312
     }
   },
   "profiles": {
@@ -30,11 +30,15 @@
       "launchBrowser": true,
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
       "environmentVariables": {
-        "ASPNETCORE_URLS": "http://+:443;http://+:80",
+        "ASPNETCORE_URLS": "https://+:443;http://+:80",
+        "ASPNETCORE_HTTPS_PORT": "7136",
         "ASPNETCORE_ENVIRONMENT": "Development",
         "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": "Microsoft.AspNetCore.SpaProxy"
       },
-      "publishAllPorts": true
+      "publishAllPorts": true,
+      "useSSL": true,
+      "httpPort": 5136,
+      "sslPort": 7136
     }
   }
 }
