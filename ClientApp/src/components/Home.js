@@ -6,25 +6,25 @@ import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { templates } from '../Constants';
+import { SelectFramework } from './SelectFramework';
 
-const steps = ['SELECT FRONTEND', 'SELECT BACKEND', 'GENERATE'];
+const steps = ['SELECT FRONTEND', 'SELECT BACKEND', 'REVIEW'];
 
 export function Home() {
     const [activeStep, setActiveStep] = React.useState(0);
     const [skipped, setSkipped] = React.useState(new Set());
     const [combinations, setCombinations] = React.useState([]);
-    const [frontends, setFrontends] = React.useState(new Set());
+    const [frontends, setFrontends] = React.useState([]);
+    const [backends, setBackends] = React.useState([]);
+    const [frontend, setFrontend] = React.useState("");
+    const [backend, setBackend] = React.useState("");
+    const [platform, setPlatform] = React.useState("web");
 
     React.useEffect(() => {
         setCombinations(() => templates);
-        combinations.map(front => {
-            setFrontends((prevFrontend) => {
-                const newFrontend = new Set(prevFrontend.values());
-                newFrontend.add(front.frontend);
-                return newFrontend;
-            });
-        });
-    }, [combinations]);
+        handleFrontends();
+        handleBackends();
+    }, [combinations, frontend]);
 
     const isStepOptional = (step) => {
         return step === 1;
@@ -68,6 +68,32 @@ export function Home() {
         setActiveStep(0);
     };
 
+    const handleFrontends = () => {
+        combinations.map(front => {
+            setFrontends((prevFrontend) => {
+                const newFrontend = new Set(prevFrontend.values());
+                newFrontend.add(front.frontend);
+                return Array.from(newFrontend);
+            });
+        });
+    }
+
+    const handleBackends = () => {
+        setBackends(() => {
+            return combinations.filter(key => key.frontend == frontend).map((key2) => { return key2.backend })
+        });
+    }
+
+    const onFrontendChange = (value) => {
+        setFrontend(value);
+        handleBackends();
+    }
+    console.log(frontend,backends);
+
+    const onBackendChange = (value) => {
+        setBackend(value);
+    }
+
     return (
         <Box sx={{ width: '100%' }}>
             <Stepper activeStep={activeStep}>
@@ -96,12 +122,18 @@ export function Home() {
                     </Typography>
                     <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
                         <Box sx={{ flex: '1 1 auto' }} />
-                        <Button onClick={handleReset}>Reset</Button>
+                        <Button onClick={handleReset}>Start new template</Button>
                     </Box>
                 </React.Fragment>
             ) : (
-                <React.Fragment>
-                    <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography>
+                    <React.Fragment>
+                        <Typography sx={{ mt: 2, mb: 5 }} align="left">Choose the frontend framework</Typography>
+                        {activeStep === 0 ?
+                            (<SelectFramework frameworks={{ ...frontends }} onFrameworkChange={onFrontendChange} />) :
+                            activeStep === 1 ? (<SelectFramework frameworks={{ ...backends }} onFrameworkChange={onBackendChange} />) :
+                                (<></>)
+                        }
+                
                     <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
                         <Button
                             color="inherit"

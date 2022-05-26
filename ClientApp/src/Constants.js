@@ -10,6 +10,11 @@
         "platform": "web"
     },
     {
+        "frontend": "react",
+        "backend": "flask",
+        "platform": "web"
+    },
+    {
         "frontend": "angular",
         "backend": "dotnet",
         "platform": "web"
