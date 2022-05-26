@@ -20,4 +20,4 @@ EXPOSE 443
 RUN mkdir /app/wwwroot
 COPY --from=dotnet-publish /app/publish .
 COPY --from=node-builder /node/build ./wwwroot
-ENTRYPOINT ["dotnet", "template-generator.dll"]
+CMD ASPNETCORE_URLS=http://*:$PORT dotnet template-generator.dll
