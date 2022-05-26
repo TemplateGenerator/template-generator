@@ -1,32 +1,22 @@
-#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
-
-FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
-WORKDIR /app
-EXPOSE 80
-EXPOSE 443
-
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
-ENV BuildingDocker true
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS dotnet-build
 WORKDIR /src
-COPY ["template-generator.csproj", "."]
-RUN dotnet restore "./template-generator.csproj"
-COPY . .
-WORKDIR "/src/."
+COPY . /src
+RUN dotnet restore "template-generator.csproj"
 RUN dotnet build "template-generator.csproj" -c Release -o /app/build
 
-FROM node:12-alpine as build-node
-WORKDIR ClientApp
-COPY ClientApp/package.json .
-COPY ClientApp/package-lock.json .
-RUN npm install
-COPY ClientApp/ .
-RUN npm run-script build
-
-FROM build AS publish
+FROM dotnet-build AS dotnet-publish
 RUN dotnet publish "template-generator.csproj" -c Release -o /app/publish
 
-FROM base AS final
+FROM node AS node-builder
+WORKDIR /node
+COPY ./ClientApp /node
+RUN npm install
+RUN npm run build
+
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS final
 WORKDIR /app
-COPY --from=publish /app/publish .
-COPY --from=build-node /ClientApp/build ./ClientApp/build
-CMD ASPNETCORE_URLS=http://*:$PORT dotnet template-generator.dll
+EXPOSE 5050
+RUN mkdir /app/wwwroot
+COPY --from=dotnet-publish /app/publish .
+COPY --from=node-builder /node/build ./wwwroot
+ENTRYPOINT ["dotnet", "template-generator.dll"]
