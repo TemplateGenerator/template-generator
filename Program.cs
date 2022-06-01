@@ -7,6 +7,22 @@ builder.Services.AddSpaStaticFiles(configuration =>
 {
     configuration.RootPath = "wwwroot";
 });
+builder.Services.AddCognitoIdentity(config =>
+{
+    config.Password = new Microsoft.AspNetCore.Identity.PasswordOptions
+    {
+        RequiredLength = 8,
+        RequireDigit = true,
+        RequireLowercase = true,
+        RequireUppercase = true,
+        RequireNonAlphanumeric = true,
+        RequiredUniqueChars = 0
+    };
+});
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/signin";
+});
 
 var app = builder.Build();
 
@@ -17,6 +33,9 @@ if (!app.Environment.IsDevelopment())
 
 app.UseStaticFiles();
 app.UseRouting();
+
+app.UseAuthorization();
+app.UseAuthentication();
 
 
 app.MapControllerRoute(
