@@ -144,7 +144,7 @@ namespace template_generator.Controllers
             return response;
         }
 
-        [HttpPost]
+        [HttpPost("confirmnewpassword")]
         public async Task<ConfirmNewPasswordResponse> ConfirmNewPassword(ConfirmNewPassword model)
         {
             ConfirmNewPasswordResponse response = new ConfirmNewPasswordResponse();
@@ -169,6 +169,24 @@ namespace template_generator.Controllers
             {
                 response.Code = StatusCodes.Status400BadRequest;
                 response.Message = Accounts.PASSWORD_UPDATE_FAILED;
+            }
+            return response;
+        }
+
+        [HttpPost("signout")]
+        public async Task<SignoutResponse> Signout()
+        {
+            SignoutResponse response = new SignoutResponse();
+            try
+            {
+                if (User.Identity.IsAuthenticated)
+                    await _signInManager.SignOutAsync().ConfigureAwait(false);
+                response.Code = StatusCodes.Status200OK;
+            }
+            catch(Exception ex)
+            {
+                response.Code = StatusCodes.Status500InternalServerError;
+                response.Message = Accounts.UNKNOWN_ERROR;
             }
             return response;
         }

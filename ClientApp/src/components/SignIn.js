@@ -43,7 +43,7 @@ export default function SignIn() {
     axios({
       method: 'POST',
       url: '/accounts/signin',
-      responseType: 'application/json',
+      responseType: 'json',
       data: {
         'Email':email,
         'Password':password,
