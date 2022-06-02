@@ -24,6 +24,8 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.LoginPath = "/signin";
 });
 
+builder.Configuration.AddEnvironmentVariables(prefix: "TB_");
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
