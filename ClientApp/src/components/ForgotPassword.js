@@ -43,7 +43,7 @@ export const ForgotPassword = () => {
           'Email': email
         }
       }).then(res => {
-        if(res.data.code == 200){
+        if(res.data.code === 200){
           setMessage("");
           setMessageAlert(false);
           setDisableConfirmationFields(false);
@@ -82,7 +82,7 @@ export const ForgotPassword = () => {
 
     const handleUpdatePassword = (event) => {
       event.preventDefault();
-      if(confirmationcode == ""){
+      if(confirmationcode === ""){
         setMessage("Confirmation code should not be empty");
         setMessageAlert(true);
         return;
@@ -107,7 +107,7 @@ export const ForgotPassword = () => {
           'NewConfirmPassword': confirmNewPassword
         }
       }).then(res => {
-        if(res.data.code == 200){
+        if(res.data.code === 200){
           setMessage("");
           setMessageAlert(false);
           toast.success('Password update successful!!', {

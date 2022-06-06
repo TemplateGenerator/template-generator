@@ -45,15 +45,15 @@ export function Home() {
         //    newSkipped = new Set(newSkipped.values());
         //    newSkipped.delete(activeStep);
         //}
-        if (activeStep == 0 && frontend == "") {
+        if (activeStep === 0 && frontend === "") {
             setAlert(true);
             return;
         }
-        if (activeStep == 1 && backend == "") {
+        if (activeStep === 1 && backend === "") {
             setAlert(true);
             return;
         }
-        if (activeStep == steps.length - 1) {
+        if (activeStep === steps.length - 1) {
             handleGenerate();
         }
 
@@ -98,7 +98,7 @@ export function Home() {
 
     const handleBackends = () => {
         setBackends(() => {
-            return combinations.filter(key => key.frontend == frontend).map((key2) => { return key2.backend })
+            return combinations.filter(key => key.frontend === frontend).map((key2) => { return key2.backend })
         });
     }
 
@@ -134,7 +134,7 @@ export function Home() {
             method: 'POST',
             headers: { "Content-Type": "application/json", "Accept": "application/json" },
             responseType: 'blob',
-            url: 'template/download',
+            url: 'templates/download',
             data: postdat
             ,
         }).then(res => {

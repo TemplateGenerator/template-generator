@@ -5,7 +5,7 @@ import {useHistory, Link} from 'react-router-dom';
 import Container from '@mui/material/Container';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
-import { TextField, Button } from '@mui/material';
+import { TextField, Button, Grid } from '@mui/material';
 import { NavItem, NavLink } from 'reactstrap';
 import { toast } from 'react-toastify';
 
@@ -40,7 +40,7 @@ export const Admin = () => {
         method: 'POST',
         url: '/accounts/signout'
         }).then(res => {
-            if(res.data.code == 200){
+            if(res.data.code === 200){
             toast.success('Sign out successful!!', {
                 position: "top-center",
                 autoClose: 1500,
@@ -142,6 +142,94 @@ export const Admin = () => {
         setBackendImageValue(event.target.value);
     }
 
+    const handleClear = () => {
+        setFrontend("");
+        setFrontendImage(undefined);
+        setFrontendImageValue("");
+        setBackend("");
+        setBackendImage(undefined);
+        setBackendImageValue("");
+    }
+
+    const handleUpload = () => {
+        if(frontend === "" || frontendImage === undefined || backend === "" || backendImage === undefined)
+        {
+            toast.error('Data missing, please check', {
+                position: "top-center",
+                autoClose: 1500,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: true,
+                progress: undefined,
+                });
+            return;
+        }
+        var formData = new FormData();
+        formData.append('FrontendName', frontend);
+        formData.append('FrontendImage', frontendImage);
+        formData.append('BackendName', backend);
+        formData.append('BackendImage', backendImage);
+        formData.append('Platform', 'web');
+        axios({
+            method: 'POST',
+            url: '/templates/upload',
+            headers: {'content-type': 'multipart/for-data'},
+            data: formData
+            }).then(res => {
+                if(res.data.code === 200){
+                    toast.success(res.data.message, {
+                        position: "top-center",
+                        autoClose: 1500,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: false,
+                        draggable: true,
+                        progress: undefined,
+                        });
+                    setFrontend("");
+                    setFrontendImage(undefined);
+                    setFrontendImageValue("");
+                    setBackend("");
+                    setBackendImage(undefined);
+                    setBackendImageValue("");
+                }
+                else if(res.data.code == 304)
+                {
+                    toast.warning(res.data.message, {
+                        position: "top-center",
+                        autoClose: 1500,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: false,
+                        draggable: true,
+                        progress: undefined,
+                        });
+                }
+                else{
+                toast.error(res.data.message, {
+                    position: "top-center",
+                    autoClose: 1500,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                    });
+                }
+            }).catch(error=>{
+                toast.error('Something went wrong, please try again!!', {
+                    position: "top-center",
+                    autoClose: 1500,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                    });
+                })
+            }
+
     return (
         <Container component="main" maxWidth="xs">
             <ul className="navbar-nav flex-grow" style={{alignItems:"flex-end"}}>
@@ -167,6 +255,7 @@ export const Admin = () => {
                     name="frontend"
                     autoComplete="frontend"
                     autoFocus
+                    value={frontend}
                     onChange={(event)=>{setFrontend(event.target.value)}}
                 />
                 <TextField
@@ -191,6 +280,7 @@ export const Admin = () => {
                     label="Backend technology"
                     name="backend"
                     autoComplete="backend"
+                    value={backend}
                     onChange={(event)=>{setBackend(event.target.value)}}
                 />
                 <TextField
@@ -207,14 +297,30 @@ export const Admin = () => {
                     value={backendImageValue}
                     onChange={handleBackendImage}
                 />
-                <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    sx={{ mt: 3, mb: 2 }}
-                >
-                    submit
-                </Button>
+                <Grid container columnSpacing={5}>
+                    <Grid item xs>
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            sx={{ mt: 3, mb: 2 }}
+                            onClick={handleClear}
+                        >
+                            Clear
+                        </Button>
+                    </Grid>
+                    <Grid item xs>
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            sx={{ mt: 3, mb: 2 }}
+                            onClick={handleUpload}
+                        >
+                            Upload
+                        </Button>
+                    </Grid>
+                </Grid>
             </Box>
         </Container>
         );

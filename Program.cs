@@ -1,3 +1,5 @@
+using template_generator.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -22,7 +24,9 @@ builder.Services.AddCognitoIdentity(config =>
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/signin";
+    options.LogoutPath = "/signout";
 });
+builder.Services.AddEntityFrameworkNpgsql().AddDbContext<TemplateBookDbContext>();
 
 builder.Configuration.AddEnvironmentVariables(prefix: "TB_");
 
@@ -33,11 +37,15 @@ if (!app.Environment.IsDevelopment())
 {
 }
 
+app.UseHttpsRedirection();
+app.UseSpaStaticFiles();
 app.UseStaticFiles();
 app.UseRouting();
+app.UseCookiePolicy();
 
 app.UseAuthorization();
 app.UseAuthentication();
+app.UseCors();
 
 
 app.MapControllerRoute(

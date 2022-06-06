@@ -1,4 +1,4 @@
-﻿namespace template_generator.Models
+﻿namespace template_generator.Models.Templates
 {
     public class Template
     {

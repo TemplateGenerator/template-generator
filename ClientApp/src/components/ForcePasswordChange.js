@@ -53,7 +53,7 @@ export const ForcePasswordChange = () => {
           'NewPassword': newPassword
         }
       }).then(res => {
-        if(res.data.code == 200){
+        if(res.data.code === 200){
           setMessage("");
           setMessageAlert(false);
           toast.success('Password update successful!!', {

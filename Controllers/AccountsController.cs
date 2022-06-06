@@ -38,6 +38,12 @@ namespace template_generator.Controllers
             return false;
         }
 
+        [HttpGet("signin")]
+        public async Task<IActionResult> Signin(string ReturnUrl)
+        {
+            return RedirectPermanent("/signin");
+        }
+
         [HttpPost("signin")]
         public async Task<SignInResponse> SignIn(SignIn model)
         {

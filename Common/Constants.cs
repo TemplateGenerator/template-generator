@@ -9,5 +9,12 @@
             public const string PASSWORD_UPDATE_FAILED = "Password update failed";
             public const string UNKNOWN_ERROR = "Something went wrong";
         }
+
+        public class Templates
+        {
+            public const string TEMPLATE_ALREADY_EXISTS = "Template already exists";
+            public const string UPLOAD_FAILED = "Template upload failed";
+            public const string UPLOAD_SUCCESSFUL = "Template uploaded successfully";
+        }
     }
 }
