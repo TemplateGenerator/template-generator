@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using template_generator.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -31,6 +32,12 @@ builder.Services.AddEntityFrameworkNpgsql().AddDbContext<TemplateBookDbContext>(
 builder.Configuration.AddEnvironmentVariables(prefix: "TB_");
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<TemplateBookDbContext>();
+    db.Database.Migrate();
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
