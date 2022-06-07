@@ -31,7 +31,7 @@ export const SelectFramework = ({ frameworks, onFrameworkChange }) => {
                             <Card sx={{ maxwidth: 20 }} key={label}>
                                 <CardActionArea key={label}>
                                     {/*<img src={ allimages.react } height="140"/>*/}
-                                    <img src={ process.env.PUBLIC_URL+'/images/'+label+'.svg' } height="140"/>
+                                    <img src={ 'https://templatebook.s3.amazonaws.com/images/'+label+'.svg' } height="140"/>
                                     <CardContent>
                                         <Typography gutterBottom variant="h5" component="div">
                                             {label.toUpperCase()}

@@ -87,6 +87,19 @@ namespace template_generator.Controllers
             return response;
         }
 
+        [HttpGet("alltemplates")]
+        public async Task<List<Template>> GetAllTemplates()
+        {
+            try
+            {
+                return _dbContext.Templates.ToList();
+            }
+            catch (Exception ex)
+            {
+                return new List<Template>();
+            }
+        }
+
         [HttpPost("download")]
         public async Task<FileContentResult> Download(Template template)
         {

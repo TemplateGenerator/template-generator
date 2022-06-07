@@ -26,9 +26,20 @@ export function Home() {
     const [alert, setAlert] = React.useState(false);
 
     React.useEffect(() => {
-        setCombinations(() => templates);
-        handleFrontends();
+        if (combinations.length == 0) {
+            axios({
+                method: 'GET',
+                url: 'templates/alltemplates'
+            }).then(res => {
+                setCombinations(res.data);
+            });
+        }
+        if(frontends.length == 0 )
+        {
+            handleFrontends();
+        }
         handleBackends();
+        console.log(combinations, frontends)
     }, [combinations, frontend]);
 
     const isStepOptional = (step) => {
@@ -114,16 +125,6 @@ export function Home() {
     }
 
     const handleGenerate = async () => {
-        //var template = new FormData();
-        //template.append("Frontend", frontend);
-        //template.append("Backend", backend);
-        //template.append("Platform", platform);
-        //console.log(template.get("Frontend"));
-        //var template = {
-        //    'Frontend': frontend,
-        //    Backend: backend,
-        //    Platform: platform
-        //}
         let postdat = {
             'Frontend': frontend,
             'Backend': backend,
