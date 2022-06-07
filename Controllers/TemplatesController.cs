@@ -23,7 +23,7 @@ namespace template_generator.Controllers
             _dbContext = dbContext;
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpPost("upload")]
         public async Task<UploadResponse> Upload([FromForm]Upload model)
         {

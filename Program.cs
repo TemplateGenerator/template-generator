@@ -50,8 +50,8 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseCookiePolicy();
 
-app.UseAuthorization();
 app.UseAuthentication();
+app.UseAuthorization();
 app.UseCors();
 
 
